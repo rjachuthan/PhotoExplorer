@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require("daisyui")],
   future: {
     removeDeprecatedGapUtilities: true,
     purgeLayersByDefault: true,
