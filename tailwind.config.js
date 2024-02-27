@@ -5,6 +5,9 @@ module.exports = {
     extend: {},
   },
   plugins: [require("daisyui")],
+  daisyui: {
+    themes: ["lofi", "dark"],
+  },
   future: {
     removeDeprecatedGapUtilities: true,
     purgeLayersByDefault: true,
