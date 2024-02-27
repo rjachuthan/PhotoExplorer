@@ -5,7 +5,7 @@ app = Flask(__name__, template_folder="templates")
 
 
 @app.route("/")
-@app.route("/index")
+@app.route("/images")
 def index():
     api_address: str = "https://civitai.com/api/v1/images?period=Day&nsfw=None"
     data = requests.get(api_address).json()
