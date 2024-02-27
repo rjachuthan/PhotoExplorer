@@ -1,0 +1,28 @@
+<!-- cards.html -->
+{% macro image_box(url, stats) -%}
+  <div class="card shadow-xl h-auto w-auto m-2 px-4 py-4 pt-4 pb-2 rounded-lg overflow border-2 border-gray-100 hover:bg-gray-100">
+    <!-- Image -->
+    <object data="{{ url }}" type="image/jpeg" class="w-full h-96 object-cover rounded-lg">
+      Image not available
+    </object>
+
+    <!-- Stats -->
+    {% set stats_list = [
+        {"icon": "icon_like", "count": stats.likeCount},
+        {"icon": "icon_heart", "count": stats.heartCount},
+        {"icon": "icon_dislike", "count": stats.dislikeCount},
+        {"icon": "icon_laugh", "count": stats.laughCount},
+        {"icon": "icon_cry", "count": stats.cryCount},
+        {"icon": "icon_chat", "count": stats.commentCount}
+    ] %}
+
+    <div class="text-center mt-2 leading-none flex justify-center bottom-0 left-0 py-2">
+      {% for stat in stats_list %}
+        <span class="text-gray-400 mx-1 inline-flex items-center leading-none text-xs p-1 border-2 rounded-md w-[3rem]">
+          {% include 'components/svg/' ~ stat.icon ~ '.html' %} {{ stat.count }}
+        </span>
+      {% endfor %}
+    </div>
+
+  </div>
+{%- endmacro %}
