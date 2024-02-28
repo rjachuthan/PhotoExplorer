@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% import "components/cards.html" as cards %}
-{% block content %}
 
+{% block content %}
 <form hx-post="/civitai/images" hx-trigger="change" hx-target="#imggrid">
   <div class="grid lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 mx-6 my-6">
 
