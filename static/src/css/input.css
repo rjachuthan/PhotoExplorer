@@ -6,3 +6,6 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+.images-btn-grp {
+    @apply join-item btn btn-sm;
+}
