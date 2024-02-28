@@ -1,12 +1,34 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% import "components/cards.html" as cards %} {% block
+content %}
 
-{% import "components/cards.html" as cards %}
+<div class="grid lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 mx-6 my-6">
 
-<!-- component -->
-{% block content %}
-  <div class="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1">
-    {% for item in data['items'] %}
-      {{ cards.image_box(url=item.url, stats=item["stats"]) }}
-    {% endfor %}
+  <div class="join p-2">
+    <input class="images-btn-grp" type="radio" name="periodoptions" aria-label="Day" checked />
+    <input class="images-btn-grp" type="radio" name="periodoptions" aria-label="Week" />
+    <input class="images-btn-grp" type="radio" name="periodoptions" aria-label="Month" />
+    <input class="images-btn-grp" type="radio" name="periodoptions" aria-label="Year" />
+    <input class="images-btn-grp" type="radio" name="periodoptions" aria-label="All Time" />
   </div>
+
+  <div class="join p-2">
+    <input class="images-btn-grp" type="radio" name="sortoptions" aria-label="None" checked />
+    <input class="images-btn-grp" type="radio" name="sortoptions" aria-label="Most Reactions"/>
+    <input class="images-btn-grp" type="radio" name="sortoptions" aria-label="Most Comments" />
+    <input class="images-btn-grp" type="radio" name="sortoptions" aria-label="Newest" />
+  </div>
+
+  <div class="join p-2">
+    <input class="images-btn-grp" type="radio" name="nsfwoptions" aria-label="None" checked />
+    <input class="images-btn-grp" type="radio" name="nsfwoptions" aria-label="Soft" />
+    <input class="images-btn-grp" type="radio" name="nsfwoptions" aria-label="Mature"/>
+    <input class="images-btn-grp" type="radio" name="nsfwoptions" aria-label="X" />
+  </div>
+
+</div>
+
+<div class="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1">
+  {% for item in data['items'] %} {{ cards.image_box(url=item.url,
+  stats=item["stats"]) }} {% endfor %}
+</div>
 {% endblock %}
