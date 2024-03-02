@@ -26,3 +26,58 @@
 
   </div>
 {%- endmacro %}
+
+{% macro model_box(name, creator, stats, image) -%}
+
+  <div class="card shadow-xl h-auto w-auto m-2 px-4 py-4 pt-4 pb-2 rounded-lg overflow border-2 border-gray-100 hover:bg-gray-100">
+  <object data="{{ image }}" type="image/jpeg" class="w-full h-96 object-cover rounded-lg">
+    Image not available
+  </object>
+
+  <div class="flex items-center mt-1">
+    <img class="w-12 h-12 rounded-xl m-1" src="{{ creator.image }}">
+    <div>
+      <strong>{{ name }}</strong>
+      <span class="text-sm text-gray-700">
+        <div class="flex items-center">
+          {{ creator.username }}
+          <svg class="w-4 h-4 text-yellow-300 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+              <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+          </svg>
+          <p class="ms-2 text-sm font-bold">{{stats.rating}}</p>
+          <span class="w-1 h-1 mx-1.5 bg-gray-500 rounded-full"></span>
+          <a href="#" class="text-sm font-medium underline hover:no-underline">{{ stats.ratingCount }}</a>
+        </div>
+      </span>
+    </div>
+  </div>
+    
+  <!-- Stats -->
+  {% set stats_list = [
+      {"icon": "icon_download", "count": stats.downloadCount},
+      {"icon": "icon_heart", "count": stats.favoriteCount},
+      {"icon": "icon_chat", "count": stats.commentCount}
+  ] %}
+
+  <div class="text-center leading-none flex justify-center bottom-0 left-0 py-2">
+    {% for stat in stats_list %}
+      <span class="text-gray-400 m-1 inline-flex justify-center leading-none text-xs p-1 border-2 rounded-md w-[4rem]">
+        {% set display_count = stat.count %}
+
+        {% if stat.count >= 1000 %}
+          {% if stat.count >= 1000000 %}
+            {% set display_count = (stat.count / 1000000) | round(1) ~ 'M' %}
+          {% else %}
+            {% set display_count = (stat.count / 1000) | round(1) ~ 'K' %}
+          {% endif %}
+        {% endif %}
+
+        {% include 'components/svg/' ~ stat.icon ~ '.html' %} {{ display_count }}
+      </span>
+    {% endfor %}
+  </div>
+
+
+
+  </div>
+{%- endmacro %}

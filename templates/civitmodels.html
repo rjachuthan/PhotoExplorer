@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% import "components/cards.html" as cards %}
+
+{% block content %}
+
+<div id="imggrid" class="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1">
+  {% for item in data['items'] %}
+    {{ cards.model_box(
+        name=item["name"],
+        creator=item["creator"],
+        stats=item["stats"],
+        image=item["modelVersions"][0]["images"][0]["url"]
+    ) }}
+  {% endfor %}
+</div>
+
+{% endblock %}

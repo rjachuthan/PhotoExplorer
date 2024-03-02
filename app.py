@@ -42,9 +42,9 @@ def civitimages():
 
 @app.route("/civitai/models")
 def civitmodels():
-    api_address: str = "https://civitai.com/api/v1/models?limit=1"
+    api_address: str = "https://civitai.com/api/v1/models"
     data = requests.get(api_address).json()
-    return render_template("index.html", data=data)
+    return render_template("civitmodels.html", data=data)
 
 
 if __name__ == "__main__":
