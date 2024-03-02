@@ -27,12 +27,15 @@
   </div>
 {%- endmacro %}
 
-{% macro model_box(name, creator, stats, image) -%}
+{% macro model_box(name, creator, stats, image, type) -%}
 
   <div class="card shadow-xl h-auto w-auto m-2 px-4 py-4 pt-4 pb-2 rounded-lg overflow border-2 border-gray-100 hover:bg-gray-100">
-  <object data="{{ image }}" type="image/jpeg" class="w-full h-96 object-cover rounded-lg">
-    Image not available
-  </object>
+  <div class="indicator w-full">
+    <span class="indicator-item indicator-bottom indicator-center badge badge-primary">{{type}}</span> 
+    <object data="{{ image }}" type="image/jpeg" class="w-full h-96 object-cover rounded-lg">
+      Image not available
+    </object>
+  </div>
 
   <div class="flex items-center mt-1">
     <img class="w-12 h-12 rounded-xl m-1" src="{{ creator.image }}">
