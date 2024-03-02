@@ -5,6 +5,7 @@ app = Flask(__name__, template_folder="templates")
 
 
 @app.route("/")
+@app.route("/civitai/images")
 def home():
     period = request.form.get("periodoptions") or "Day"
     sort = request.form.get("sortoptions") or "Newest"

@@ -10,8 +10,8 @@
     { 
         "name": "CivitAI",
         "url": "/", "children": [
-            {"name": "Images", "url": "/images"},
-            {"name": "Models", "url": "/models"}
+            {"name": "Images", "url": "/civitai/images"},
+            {"name": "Models", "url": "/civitai/models"}
         ]
     },
     {"name": "Stabe Diffusion", "url": "/contact"}
@@ -48,7 +48,7 @@
           {% if item.children %}
           <ul class="p-2">
             {% for child in item.children %}
-            <li><a>{{ child.name }}</a></li>
+            <li><a href={{ child.url }}>{{ child.name }}</a></li>
             {% endfor %}
           </ul>
           {% endif %}
@@ -70,7 +70,7 @@
                     <summary>{{item.name}}</summary>
                     <ul class="p-2 dropdown-content z-50">
                         {% for child in item.children %}
-                        <li><a>{{ child.name }}</a></li>
+                        <li><a href={{ child.url }}>{{ child.name }}</a></li>
                         {% endfor %}
                     </ul>
                 </details>
