@@ -2,9 +2,39 @@
 {% import "components/cards.html" as cards %}
 
 {% block content %}
+<form hx-post="/civitai/models" hx-trigger="change" hx-target="#imggrid">
+  <div class="grid lg:grid-cols-6 md:grid-cols-2 sm:grid-cols-2 mx-6 my-3">
+
+    <select name="modeltype" id="modeltype" class="select select-ghost w-full max-w-xs">
+      <option disabled selected>Type</option>
+      <option value="Checkpoint">Checkpoint</option>
+      <option value="LORA">LORA</option>
+      <option value="Controlnet">ControlNet</option>
+      <option value="Poses">Poses</option>
+      <option value="TextualInversion">Textual Inversion</option>
+      <option value="Hypernetwork">Hypernetwork</option>
+      <option value="AestheticGradient">Aesthetic Gradient</option>
+    </select>
+
+    <select name="sort" id="sort" class="select select-ghost w-full max-w-xs">
+      <option disabled selected>No Sort</option>
+      <option value="Highest Rated">Highest Rated</option>
+      <option value="Most Downloaded">Most Donwloaded</option>
+      <option value="Newest">Newest</option>
+    </select>
+
+    <div class="form-control items-start">
+      <label class="label cursor-pointer">
+        <span class="label-text mx-1">NSFW</span> 
+        <input type="checkbox" id="nsfw" name="nsfw" class="toggle"/>
+      </label>
+    </div>
+
+  </div>
+</form>
 
 <div id="imggrid" class="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1">
-  {% for item in data['items'] %}
+  {% for item in data["items"] %}
     {{ cards.model_box(
         name=item["name"],
         creator=item["creator"],

@@ -41,11 +41,63 @@ def civitimages():
     return rendered_template
 
 
-@app.route("/civitai/models")
+@app.route("/civitai/models", methods=["GET", "POST"])
 def civitmodels():
     api_address: str = "https://civitai.com/api/v1/models"
-    data = requests.get(api_address).json()
-    return render_template("civitmodels.html", data=data)
+
+    if request.method == "GET":
+        data = requests.get(api_address).json()
+        return render_template("civitmodels.html", data=data)
+
+    if request.method == "POST":
+        modeltype = request.form.get("modeltype", default="Type")
+        sort = request.form.get("sort", default="No Sort")
+        nsfw = request.form.get("nsfw", default="off")
+        nsfw = "false" if nsfw == "off" else "true"
+
+        api_address = f"{api_address}?nsfw={nsfw}"
+        api_address = f"{api_address}&sort={sort}" if sort != "No Sort" else api_address
+        api_address = (
+            f"{api_address}&types={modeltype}" if modeltype != "Type" else api_address
+        )
+        print(api_address)
+
+        data = requests.get(api_address).json()
+
+        extracted_data = []
+        for item in data["items"]:
+            url = ""
+            image_section = item["modelVersions"][0]["images"]
+            if len(image_section) > 0:
+                try:
+                    url = image_section[0]["url"]
+                except KeyError:
+                    url = ""
+            extracted_item = {
+                "name": item["name"],
+                "creator": item["creator"],
+                "type": item["type"],
+                "stats": item["stats"],
+                "image": url,
+            }
+            extracted_data.append(extracted_item)
+
+        rendered_template = render_template_string(
+            """
+                {% import "components/cards.html" as cards %}
+                {% for item in data %}
+                    {{ cards.model_box(
+                        name=item["name"],
+                        creator=item["creator"],
+                        type=item["type"],
+                        stats=item["stats"],
+                        image=item["url"]
+                    ) }}
+                {% endfor %}
+            """,
+            data=extracted_data,
+        )
+        return rendered_template
 
 
 if __name__ == "__main__":
