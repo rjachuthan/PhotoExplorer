@@ -62,15 +62,19 @@ def civitmodels():
         )
         print(api_address)
 
-        data = requests.get(api_address).json()
+        try:
+            data = requests.get(api_address).json()
+        except ConnectionError as err:
+            print(f"Connection issues: {err}")
+            return ""
 
         extracted_data = []
         for item in data["items"]:
             url = ""
-            image_section = item["modelVersions"][0]["images"]
-            if len(image_section) > 0:
+            imagesection = item["modelVersions"][0]["images"]
+            if len(imagesection) > 0:
                 try:
-                    url = image_section[0]["url"]
+                    url = imagesection[0]["url"]
                 except KeyError:
                     url = ""
             extracted_item = {
@@ -91,7 +95,7 @@ def civitmodels():
                         creator=item["creator"],
                         type=item["type"],
                         stats=item["stats"],
-                        image=item["url"]
+                        image=item["image"]
                     ) }}
                 {% endfor %}
             """,
