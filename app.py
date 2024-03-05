@@ -1,4 +1,5 @@
 from enum import Enum
+from urllib.parse import urlencode
 
 import requests
 from flask import Flask, render_template, render_template_string, request
@@ -15,7 +16,7 @@ class CivitaiAPI(Enum):
 
 @app.route("/", methods=["GET"])
 @app.route("/civitai/images", methods=["GET", "POST"])
-def civitimages():
+def civitimages() -> str:
     if request.method == "GET":
         data = requests.get(CivitaiAPI.IMAGES.value).json()
         return render_template("index.html", data=data)
@@ -41,9 +42,12 @@ def civitimages():
 
         return rendered_template
 
+    # TODO: Add a return statement to handle where neither GET nor POST method is used
+    return ""
+
 
 @app.route("/civitai/models", methods=["GET", "POST"])
-def civitmodels():
+def civitmodels() -> str:
     """
     This function handles the '/civitai/models' route, which supports both GET
     and POST requests. For GET requests, it retrieves data from the
@@ -55,10 +59,10 @@ def civitmodels():
     Returns:
         The rendered template for the models with the data.
     """
-    api_address: str = CivitaiAPI.MODELS.value
+    model_api: str = CivitaiAPI.MODELS.value
 
     if request.method == "GET":
-        data = requests.get(api_address).json()
+        data = requests.get(model_api).json()
         return render_template("civitmodels.html", data=data)
 
     if request.method == "POST":
@@ -67,26 +71,26 @@ def civitmodels():
         nsfw = request.form.get("nsfw", default="off")
         nsfw = "false" if nsfw == "off" else "true"
 
-        api_address = f"{api_address}?nsfw={nsfw}"
-        api_address = f"{api_address}&sort={sort}" if sort != "No Sort" else api_address
-        api_address = (
-            f"{api_address}&types={modeltype}" if modeltype != "Type" else api_address
-        )
-        print(api_address)
+        params = {"nsfw": nsfw}
+        if sort != "No Sort":
+            params["sort"] = sort
+        if modeltype != "Type":
+            params["types"] = modeltype
 
         try:
-            data = requests.get(api_address).json()
+            model_api = f"{model_api}?{urlencode(params)}"
+            data = requests.get(model_api).json()
         except ConnectionError as err:
             print(f"Connection issues: {err}")
+            # TODO: Return an Error Handler Page
             return ""
 
-        extracted_data = []
+        extracted_data: list[dict[str, str]] = []
         for item in data["items"]:
-            url = "/static/img/image_not_found.png"
-            imagesection = item["modelVersions"][0]["images"]
-            if len(imagesection) > 0:
+            image_section = item["modelVersions"][0]["images"]
+            if len(image_section) > 0:
                 try:
-                    url = imagesection[0]["url"]
+                    url = image_section[0]["url"]
                 except KeyError:
                     url = "/static/img/image_not_found.png"
             extracted_item = {
@@ -114,6 +118,9 @@ def civitmodels():
             data=extracted_data,
         )
         return rendered_template
+
+    # TODO: Add a return statement to handle where neither GET nor POST method is used
+    return ""
 
 
 if __name__ == "__main__":
