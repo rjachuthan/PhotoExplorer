@@ -18,8 +18,9 @@ class CivitaiAPI(Enum):
 @app.route("/civitai/images", methods=["GET", "POST"])
 def civitimages() -> str:
     if request.method == "GET":
-        data = requests.get(CivitaiAPI.IMAGES.value).json()
-        return render_template("index.html", data=data)
+        url = f"{CivitaiAPI.IMAGES.value}?nsfw=None"
+        data = requests.get(url).json()
+        return render_template("civitai/image_page.html", data=data)
 
     if request.method == "POST":
         period = request.form.get("periodoptions") or "Day"
