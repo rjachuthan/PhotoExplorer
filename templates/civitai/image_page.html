@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form hx-post="/civitai/images" hx-trigger="change" hx-target="#imggrid">
+  <div class="grid lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 mx-6 my-6">
+
+    <div class="join p-2">
+      <input class="images-btn-grp" type="radio" name="periodoptions" value="Day" aria-label="Day" checked />
+      <input class="images-btn-grp" type="radio" name="periodoptions" value="Week" aria-label="Week" />
+      <input class="images-btn-grp" type="radio" name="periodoptions" value="Month" aria-label="Month" />
+      <input class="images-btn-grp" type="radio" name="periodoptions" value="Year" aria-label="Year" />
+      <input class="images-btn-grp" type="radio" name="periodoptions" value="AllTime" aria-label="All Time" />
+    </div>
+
+    <div class="join p-2">
+      <input class="images-btn-grp" type="radio" name="sortoptions" value="Most Reactions" aria-label="Most Reactions"/>
+      <input class="images-btn-grp" type="radio" name="sortoptions" value="Most Comments" aria-label="Most Comments" />
+      <input class="images-btn-grp" type="radio" name="sortoptions" value="Newest" aria-label="Newest" />
+    </div>
+
+    <div class="join p-2">
+      <input class="images-btn-grp" type="radio" name="nsfwoptions" value="None" aria-label="None" checked />
+      <input class="images-btn-grp" type="radio" name="nsfwoptions" value="Soft" aria-label="Soft" />
+      <input class="images-btn-grp" type="radio" name="nsfwoptions" value="Mature" aria-label="Mature"/>
+      <input class="images-btn-grp" type="radio" name="nsfwoptions" value="X" aria-label="X" />
+    </div>
+
+  </div>
+</form>
+
+<div id="imggrid" class="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1">
+    {% import "components/civitai/image_grids.html" %}
+</div>
+{% endblock %}

@@ -31,15 +31,7 @@ def civitimages() -> str:
         api_address: str = f"{url}?period={period}&nsfw={nsfw}&sort={sort}"
 
         data = requests.get(api_address).json()
-        rendered_template = render_template_string(
-            """
-                {% import "components/cards.html" as cards %}
-                {% for item in data['items'] %}
-                    {{ cards.image_box(url=item.url, stats=item['stats']) }}
-                {% endfor %}
-            """,
-            data=data,
-        )
+        rendered_template = render_template("civitai/image_grids.html", data=data)
 
         return rendered_template
 
