@@ -1,5 +1,7 @@
 {% import "components/cards.html" as cards %}
 
-{% for item in data['items'] %}
-  {{ cards.image_box(url=item.url, stats=item["stats"]) }}
-{% endfor %}
+{% block image_grid %}
+  {% for item in data['items'] %}
+    {{ cards.image_box(url=item.url, stats=item["stats"]) }}
+  {% endfor %}
+{% endblock %}

@@ -1,0 +1,13 @@
+{% import "components/cards.html" as cards %}
+
+{% for item in data %}
+    {{
+        cards.model_box(
+            name=item["name"],
+            creator=item["creator"],
+            type=item["type"],
+            stats=item["stats"],
+            image=item["image"]
+        )
+    }}
+{% endfor %}

@@ -55,8 +55,27 @@ def civitmodels() -> str:
     model_api: str = CivitaiAPI.MODELS.value
 
     if request.method == "GET":
+        model_api = f"{model_api}?nsfw=false"
         data = requests.get(model_api).json()
-        return render_template("civitmodels.html", data=data)
+
+        extracted_data: list[dict[str, str]] = []
+        for item in data["items"]:
+            image_section = item["modelVersions"][0]["images"]
+            if len(image_section) > 0:
+                try:
+                    url = image_section[0]["url"]
+                except KeyError:
+                    url = "/static/img/image_not_found.png"
+            extracted_item = {
+                "name": item["name"],
+                "creator": item["creator"],
+                "type": item["type"],
+                "stats": item["stats"],
+                "image": url,
+            }
+            extracted_data.append(extracted_item)
+
+        return render_template("civitai/model_page.html", data=extracted_data)
 
     if request.method == "POST":
         modeltype = request.form.get("modeltype", default="Type")
@@ -95,20 +114,8 @@ def civitmodels() -> str:
             }
             extracted_data.append(extracted_item)
 
-        rendered_template = render_template_string(
-            """
-                {% import "components/cards.html" as cards %}
-                {% for item in data %}
-                    {{ cards.model_box(
-                        name=item["name"],
-                        creator=item["creator"],
-                        type=item["type"],
-                        stats=item["stats"],
-                        image=item["image"]
-                    ) }}
-                {% endfor %}
-            """,
-            data=extracted_data,
+        rendered_template = render_template(
+            "civitai/model_grids.html", data=extracted_data
         )
         return rendered_template
 
