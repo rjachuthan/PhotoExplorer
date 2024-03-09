@@ -14,7 +14,7 @@
             {"name": "Models", "url": "/civitai/models"}
         ]
     },
-    {"name": "Stabe Diffusion", "url": "/contact"}
+    {"name": "Stabe Diffusion", "url": "/imggen"}
 ] %}
 
 <!-- Navigation Bar -->
@@ -76,7 +76,7 @@
                 </details>
             </li>
         {% else %}
-            <li><a>{{ item.name }}</a></li>
+            <li><a href="{{ item.url }}">{{ item.name }}</a></li>
         {% endif %}
       </li>
       {% endfor %}

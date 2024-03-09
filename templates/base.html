@@ -14,10 +14,13 @@
       integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
       crossorigin="anonymous"
     ></script>
+    <script
+      defer
+      src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
   </head>
 
   <body class="container mx-auto p-2">
-    {% include "navbar.html" %}
-    {% block content %} {% endblock %}
+    {% include "navbar.html" %} {% block content %} {% endblock %}
   </body>
 </html>

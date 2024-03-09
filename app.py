@@ -123,5 +123,10 @@ def civitmodels() -> str:
     return ""
 
 
+@app.route("/imggen", methods=["GET", "POST"])
+def text2img():
+    return render_template("image_generation/base.html")
+
+
 if __name__ == "__main__":
     app.run(debug=True)
