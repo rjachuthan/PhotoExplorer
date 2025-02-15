@@ -1,10 +1,11 @@
 from enum import Enum
+from typing import Any
 from urllib.parse import urlencode
 
 import requests
-from flask import Flask, render_template, render_template_string, request
+from flask import Flask, render_template, request
 
-app = Flask(__name__, template_folder="templates")
+app = Flask(import_name=__name__, template_folder="templates")
 
 
 class CivitaiAPI(Enum):
@@ -14,24 +15,30 @@ class CivitaiAPI(Enum):
     MODELS = "https://civitai.com/api/v1/models"
 
 
-@app.route("/", methods=["GET"])
-@app.route("/civitai/images", methods=["GET", "POST"])
+@app.route(rule="/", methods=["GET"])
+@app.route(rule="/civitai/images", methods=["GET", "POST"])
 def civitimages() -> str:
     if request.method == "GET":
-        url = f"{CivitaiAPI.IMAGES.value}?nsfw=None"
-        data = requests.get(url).json()
-        return render_template("civitai/image_page.html", data=data)
+        url: str = f"{CivitaiAPI.IMAGES.value}?nsfw=None"
+        data: dict[str, Any] = requests.get(url=url).json()
+        return render_template(
+            template_name_or_list="civitai/image_page.html",
+            data=data,
+        )
 
     if request.method == "POST":
-        period = request.form.get("periodoptions") or "Day"
-        sort = request.form.get("sortoptions") or "Newest"
-        nsfw = request.form.get("nsfwoptions") or "None"
+        period: str = request.form.get("periodoptions") or "Day"
+        sort: str = request.form.get("sortoptions") or "Newest"
+        nsfw: str = request.form.get("nsfwoptions") or "None"
 
         url = CivitaiAPI.IMAGES.value
         api_address: str = f"{url}?period={period}&nsfw={nsfw}&sort={sort}"
 
-        data = requests.get(api_address).json()
-        rendered_template = render_template("civitai/image_grids.html", data=data)
+        data: dict[str, Any] = requests.get(url=api_address).json()
+        rendered_template: str = render_template(
+            template_name_or_list="civitai/image_grids.html",
+            data=data,
+        )
 
         return rendered_template
 
@@ -39,7 +46,7 @@ def civitimages() -> str:
     return ""
 
 
-@app.route("/civitai/models", methods=["GET", "POST"])
+@app.route(rule="/civitai/models", methods=["GET", "POST"])
 def civitmodels() -> str:
     """
     This function handles the '/civitai/models' route, which supports both GET
@@ -55,8 +62,8 @@ def civitmodels() -> str:
     model_api: str = CivitaiAPI.MODELS.value
 
     if request.method == "GET":
-        model_api = f"{model_api}?nsfw=false"
-        data = requests.get(model_api).json()
+        model_api: str = f"{model_api}?nsfw=false"
+        data: dict[str, Any] = requests.get(url=model_api).json()
 
         extracted_data: list[dict[str, str]] = []
         for item in data["items"]:
@@ -67,21 +74,24 @@ def civitmodels() -> str:
                 except KeyError:
                     url = "/static/img/image_not_found.png"
             extracted_item = {
-                "name": item["name"],
-                "creator": item["creator"],
-                "type": item["type"],
-                "stats": item["stats"],
+                "name": item.get("name", "Unknown"),
+                "creator": item.get("creator", {}).get("username", "Unknown Creator"),
+                "type": item.get("type", "Unknown Type"),
+                "stats": item.get("stats", {}),
                 "image": url,
             }
             extracted_data.append(extracted_item)
 
-        return render_template("civitai/model_page.html", data=extracted_data)
+        return render_template(
+            template_name_or_list="civitai/model_page.html",
+            data=extracted_data,
+        )
 
     if request.method == "POST":
-        modeltype = request.form.get("modeltype", default="Type")
-        sort = request.form.get("sort", default="No Sort")
-        nsfw = request.form.get("nsfw", default="off")
-        nsfw = "false" if nsfw == "off" else "true"
+        modeltype: str = request.form.get("modeltype", default="Type")
+        sort: str = request.form.get("sort", default="No Sort")
+        nsfw: str = request.form.get("nsfw", default="off")
+        nsfw: str = "false" if nsfw == "off" else "true"
 
         params = {"nsfw": nsfw}
         if sort != "No Sort":
@@ -106,16 +116,17 @@ def civitmodels() -> str:
                 except KeyError:
                     url = "/static/img/image_not_found.png"
             extracted_item = {
-                "name": item["name"],
-                "creator": item["creator"],
-                "type": item["type"],
-                "stats": item["stats"],
+                "name": item.get("name", "Unknown"),
+                "creator": item.get("creator", {}).get("username", "Unknown Creator"),
+                "type": item.get("type", "Unknown Type"),
+                "stats": item.get("stats", {}),
                 "image": url,
             }
             extracted_data.append(extracted_item)
 
         rendered_template = render_template(
-            "civitai/model_grids.html", data=extracted_data
+            template_name_or_list="civitai/model_grids.html",
+            data=extracted_data,
         )
         return rendered_template
 
