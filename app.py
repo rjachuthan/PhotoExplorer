@@ -15,7 +15,19 @@ class CivitaiAPI(Enum):
     MODELS = "https://civitai.com/api/v1/models"
 
 
-@app.route(rule="/", methods=["GET"])
+def format_number(num) -> str:
+    """Format a number to a short form (e.g., 1.2K, 3.4M)."""
+    if num >= 1_000_000:
+        return f"{num / 1_000_000:.1f}M"
+    elif num >= 1_000:
+        return f"{num / 1_000:.1f}K"
+    return str(num)
+
+
+app.jinja_env.globals.update(format_number=format_number)
+
+
+@app.route(rule="/", methods=["GET", "POST"])
 @app.route(rule="/civitai/images", methods=["GET", "POST"])
 def civitimages() -> str:
     if request.method == "GET":

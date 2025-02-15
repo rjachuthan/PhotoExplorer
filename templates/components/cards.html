@@ -1,4 +1,3 @@
-
 <!-- 
   This is a macro for showcasing CivitAI Images which generates a card component
   with an image and statistics.
@@ -15,12 +14,12 @@
 
     <!-- Stats -->
     {% set stats_list = [
-        {"icon": "icon_like", "count": stats.likeCount},
-        {"icon": "icon_heart", "count": stats.heartCount},
-        {"icon": "icon_dislike", "count": stats.dislikeCount},
-        {"icon": "icon_laugh", "count": stats.laughCount},
-        {"icon": "icon_cry", "count": stats.cryCount},
-        {"icon": "icon_chat", "count": stats.commentCount}
+        {"icon": "icon_like", "count": format_number(stats.likeCount)},
+        {"icon": "icon_heart", "count": format_number(stats.heartCount)},
+        {"icon": "icon_dislike", "count": format_number(stats.dislikeCount)},
+        {"icon": "icon_laugh", "count": format_number(stats.laughCount)},
+        {"icon": "icon_cry", "count": format_number(stats.cryCount)},
+        {"icon": "icon_chat", "count": format_number(stats.commentCount)}
     ] %}
 
     <div class="text-center mt-2 leading-none flex justify-center bottom-0 left-0 py-2">
@@ -70,7 +69,7 @@
             </svg>
             <p class="ms-2 text-sm font-bold">{{stats.rating}}</p>
             <span class="w-1 h-1 mx-1.5 bg-gray-500 rounded-full"></span>
-            <a href="#" class="text-sm font-medium underline hover:no-underline">{{ stats.ratingCount }}</a>
+            <a href="#" class="text-sm font-medium underline hover:no-underline">{{ format_number(stats.ratingCount) }}</a>
           </div>
         </span>
       </div>
@@ -78,25 +77,15 @@
       
     <!-- Stats -->
     {% set stats_list = [
-        {"icon": "icon_download", "count": stats.downloadCount},
-        {"icon": "icon_heart", "count": stats.favoriteCount},
-        {"icon": "icon_chat", "count": stats.commentCount}
+        {"icon": "icon_download", "count": format_number(stats.downloadCount)},
+        {"icon": "icon_heart", "count": format_number(stats.favoriteCount)},
+        {"icon": "icon_chat", "count": format_number(stats.commentCount)}
     ] %}
 
     <div class="text-center leading-none flex justify-center bottom-0 left-0 py-2">
       {% for stat in stats_list %}
         <span class="text-gray-400 m-1 inline-flex justify-center leading-none text-xs p-1 border-2 rounded-md w-[4rem]">
-          {% set display_count = stat.count %}
-
-          {% if stat.count >= 1000 %}
-            {% if stat.count >= 1000000 %}
-              {% set display_count = (stat.count / 1000000) | round(1) ~ 'M' %}
-            {% else %}
-              {% set display_count = (stat.count / 1000) | round(1) ~ 'K' %}
-            {% endif %}
-          {% endif %}
-
-          {% include 'components/svg/' ~ stat.icon ~ '.html' %} {{ display_count }}
+          {% include 'components/svg/' ~ stat.icon ~ '.html' %} {{ stat.count }}
         </span>
       {% endfor %}
     </div>
